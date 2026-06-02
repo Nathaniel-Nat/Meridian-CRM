@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian CRM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            /* Fundação */
+            --color-paper: #F5F2EC;
+            --color-ink: #1A1814;
+            --color-ink-muted: #6B6459;
+            --color-ink-faint: #B8B0A4;
+
+            /* Superfícies */
+            --color-surface: #FDFAF5;
+            --color-surface-alt: #EDE9E1;
+            --color-border: #D4CEC5;
+            --color-border-strong: #9A9189;
+
+            /* Acento */
+            --color-accent: #C4421A;
+            --color-accent-light: #F0E4DE;
+            --color-accent-dark: #8F2E0F;
+
+            /* Utilitários */
+            --color-success: #2D6A4F;
+            --color-warning: #A0522D;
+            --color-info: #2B4C7E;
+
+            /* Tipografia */
+            --text-2xs: 0.6875rem;
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.375rem;
+            --text-2xl: 1.75rem;
+            --text-3xl: 2.5rem;
+
+            /* Espaçamento */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 20px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-10: 40px;
+
+            --radius-sm: 2px;
+            --radius-md: 4px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--color-paper);
+            color: var(--color-ink);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 240px;
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-6) 0;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: var(--text-xl);
+            font-weight: 700;
+            padding: 0 var(--space-6);
+            margin-bottom: var(--space-8);
+            color: var(--color-paper);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .nav-item {
+            cursor: pointer;
+            padding: var(--space-3) var(--space-6);
+            transition: background 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            font-weight: 400;
+            color: rgba(245, 242, 236, 0.7);
+            font-size: var(--text-sm);
+            border-left: 2px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255,255,255,0.05);
+            color: var(--color-paper);
+        }
+
+        .nav-item.active {
+            color: var(--color-paper);
+            background-color: rgba(255,255,255,0.05);
+            border-left: 2px solid var(--color-accent);
+        }
+
+        /* Main Content */
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: var(--space-10) var(--space-8);
+            max-width: 1280px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-6);
+            color: var(--color-ink);
+            letter-spacing: -0.02em;
+        }
+
+        /* Shared UI Components */
+        .card {
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            padding: var(--space-5) var(--space-6);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn {
+            padding: 0 var(--space-5);
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-3);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: var(--color-paper);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-accent-dark);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--color-border-strong);
+            color: var(--color-ink);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-surface-alt);
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--color-accent);
+            border: none;
+        }
+
+        .btn-ghost:hover {
+            background-color: var(--color-accent-light);
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border: 1px solid transparent;
+            display: inline-block;
+        }
+
+        .badge-won { background: #E8F4EE; color: var(--color-success); border-color: #D1E7DD; }
+        .badge-lost { background: var(--color-surface-alt); color: var(--color-ink-muted); border-color: var(--color-border); }
+        .badge-hot { background: var(--color-accent-light); color: var(--color-accent); border-color: var(--color-accent); }
+        .badge-pending { background: #FDF3E8; color: var(--color-warning); border-color: #FBE4D3; }
+
+        /* Dashboard KPI */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-6);
+            margin-bottom: var(--space-10);
+        }
+
+        .kpi-card {
+            border-right: 1px solid var(--color-border);
+            padding: 0 var(--space-6);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kpi-card:last-child {
+            border-right: none;
+        }
+
+        .kpi-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--color-ink);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--color-ink-muted);
+            margin-top: var(--space-2);
+        }
+
+        /* Tables */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+            gap: var(--space-6);
+        }
+
+        .search-box {
+            display: flex;
+            gap: var(--space-3);
+            flex-grow: 1;
+            max-width: 500px;
+        }
+
+        input, select, textarea {
+            height: 36px;
+            padding: 0 var(--space-4);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border);
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: var(--text-sm);
+            color: var(--color-ink);
+            background: var(--color-surface);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--color-ink);
+            box-shadow: 0 0 0 3px rgba(26,24,20,0.08);
+        }
+
+        .table-container {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .meridian-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .meridian-table th {
+            background: var(--color-surface-alt);
+            padding: 12px 16px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--color-ink-muted);
+            border-bottom: 2px solid var(--color-ink);
+            font-weight: 600;
+        }
+
+        .meridian-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--color-border);
+            font-size: var(--text-sm);
+            height: 48px;
+        }
+
+        .meridian-table tr:hover {
+            background-color: var(--color-surface-alt);
+        }
+
+        .meridian-table .cell-mono {
+            font-family: 'IBM Plex Mono', monospace;
+            text-align: right;
+        }
+
+        .meridian-table .cell-id {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--color-ink-muted);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26,24,20,0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal {
+            background: var(--color-surface);
+            padding: var(--space-8);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .modal-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: var(--text-xl);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-4);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .form-group label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--color-ink-muted);
+            font-weight: 500;
+        }
+
+        /* Pipeline Kanban */
+        .kanban-board {
+            display: flex;
+            gap: var(--space-6);
+            overflow-x: auto;
+            padding-bottom: var(--space-6);
+            height: calc(100vh - 250px);
+            align-items: flex-start;
+        }
+
+        .kanban-column {
+            background: var(--color-surface-alt);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            width: 280px;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            max-height: 100%;
+        }
+
+        .column-header {
+            padding: var(--space-4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--color-ink);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .column-count {
+            background: var(--color-border);
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .column-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .kanban-cards {
+            padding: var(--space-4);
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+            min-height: 100px;
+        }
+
+        .deal-card {
+            background: var(--color-surface);
+            padding: var(--space-4);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border);
+            cursor: grab;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .deal-card:active {
+            cursor: grabbing;
+            transform: rotate(1deg) scale(1.02);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            opacity: 0.8;
+        }
+
+        .deal-card h4 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .deal-card .deal-info {
+            font-size: 12px;
+            color: var(--color-ink-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .deal-card .deal-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            color: var(--color-ink);
+        }
+
+        /* Detail Page */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: var(--space-8);
+        }
+
+        .detail-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-6);
+        }
+
+        .detail-header {
+            margin-bottom: var(--space-6);
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: var(--space-6);
+        }
+
+        .detail-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: var(--text-xl);
+            margin-bottom: var(--space-2);
+        }
+
+        .detail-field {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-3);
+            font-size: var(--text-sm);
+        }
+
+        .detail-field label {
+            text-transform: uppercase;
+            font-size: 11px;
+            color: var(--color-ink-muted);
+            letter-spacing: 0.04em;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+
+        .activity-item {
+            padding: var(--space-4);
+            border-left: 3px solid var(--color-accent);
+            background: var(--color-surface);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            border: 1px solid var(--color-border);
+            border-left-width: 3px;
+        }
+
+        .activity-meta {
+            font-size: 11px;
+            color: var(--color-ink-muted);
+            margin-bottom: var(--space-2);
+            display: flex;
+            justify-content: space-between;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .activity-type {
+            font-weight: 600;
+            color: var(--color-ink);
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo">Meridian CRM</div>
+        <ul class="nav-links">
+            <li class="nav-item active" data-page="dashboard">
+                <i class="ph-bold ph-chart-pie"></i> Dashboard
+            </li>
+            <li class="nav-item" data-page="contacts">
+                <i class="ph-bold ph-address-book"></i> Contatos
+            </li>
+            <li class="nav-item" data-page="pipeline">
+                <i class="ph-bold ph-funnel"></i> Pipeline
+            </li>
+        </ul>
+    </aside>
+
+    <main id="app">
+        <section class="page active" data-page="dashboard">
+            <h1>Dashboard</h1>
+            <div id="dashboard-content"></div>
+        </section>
+
+        <section class="page" data-page="contacts">
+            <h1>Contatos</h1>
+            <div id="contacts-content"></div>
+        </section>
+
+        <section class="page" data-page="pipeline">
+            <h1>Pipeline de Vendas</h1>
+            <div id="pipeline-content"></div>
+        </section>
+
+        <section class="page" data-page="detail">
+            <h1>Detalhes do Contato</h1>
+            <div id="detail-content"></div>
+        </section>
+    </main>
+
+    <script>
+        // --- DATA MODELS & STORAGE ---
+        const DB = {
+            get: (key) => JSON.parse(localStorage.getItem(`crm:${key}`)) || [],
+            set: (key, data) => localStorage.setItem(`crm:${key}`, JSON.stringify(data)),
+
+            saveContact: (contact) => {
+                const contacts = DB.get('contacts');
+                const index = contacts.findIndex(c => c.id === contact.id);
+                if (index > -1) contacts[index] = contact;
+                else contacts.push(contact);
+                DB.set('contacts', contacts);
+            },
+
+            deleteContact: (id) => {
+                const contacts = DB.get('contacts').filter(c => c.id !== id);
+                DB.set('contacts', contacts);
+                const deals = DB.get('deals').filter(d => d.contactId !== id);
+                DB.set('deals', deals);
+                const activities = DB.get('activities').filter(a => a.contactId !== id);
+                DB.set('activities', activities);
+            },
+
+            saveDeal: (deal) => {
+                const deals = DB.get('deals');
+                const index = deals.findIndex(d => d.id === deal.id);
+                if (index > -1) deals[index] = deal;
+                else deals.push(deal);
+                DB.set('deals', deals);
+            },
+
+            deleteDeal: (id) => {
+                const deals = DB.get('deals').filter(d => d.id !== id);
+                DB.set('deals', deals);
+                const activities = DB.get('activities').filter(a => a.dealId !== id);
+                DB.set('activities', activities);
+            },
+
+            saveActivity: (activity) => {
+                const activities = DB.get('activities');
+                activities.push(activity);
+                DB.set('activities', activities);
+            },
+
+            seed: () => {
+                if (DB.get('contacts').length > 0) return;
+
+                const c1 = { id: crypto.randomUUID(), name: 'João Silva', email: 'joao@email.com', phone: '11 99999-0000', company: 'Tech Corp', status: 'cliente', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+                const c2 = { id: crypto.randomUUID(), name: 'Maria Souza', email: 'maria@email.com', phone: '21 98888-1111', company: 'Design Studio', status: 'lead', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+                const c3 = { id: crypto.randomUUID(), name: 'Carlos Lima', email: 'carlos@email.com', phone: '31 97777-2222', company: 'Inova Ltda', status: 'inativo', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+
+                DB.set('contacts', [c1, c2, c3]);
+
+                const d1 = { id: crypto.randomUUID(), title: 'Consultoria Anual', contactId: c1.id, stage: 'ganho', value: 5000, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+                const d2 = { id: crypto.randomUUID(), title: 'Novo Site', contactId: c2.id, stage: 'proposta', value: 2500, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+                DB.set('deals', [d1, d2]);
+
+                DB.saveActivity({ id: crypto.randomUUID(), contactId: c1.id, dealId: d1.id, type: 'reuniao', description: 'Alinhamento de escopo inicial', createdAt: new Date().toISOString() });
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let state = {
+            currentPage: 'dashboard',
+            currentContactId: null
+        };
+
+        // --- UI HELPERS ---
+        const $ = (selector) => document.querySelector(selector);
+        const $$ = (selector) => document.querySelectorAll(selector);
+
+        function createBtn(text, className = 'btn-primary', onClick, icon = '') {
+            const btn = document.createElement('button');
+            btn.className = `btn ${className}`;
+            btn.innerHTML = `${icon ? `<i class="ph-bold ${icon}"></i>` : ''} ${text}`;
+            btn.onclick = onClick;
+            return btn;
+        }
+
+        // --- NAVIGATION SYSTEM ---
+        $$('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const pageId = item.getAttribute('data-page');
+                $$('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                navigateTo(pageId);
+            });
+        });
+
+        function navigateTo(pageId) {
+            state.currentPage = pageId;
+            $$('.page').forEach(page => {
+                page.classList.toggle('active', page.getAttribute('data-page') === pageId);
+            });
+            renderCurrentPage();
+        }
+
+        // --- PAGE RENDERING ---
+        function renderCurrentPage() {
+            switch(state.currentPage) {
+                case 'dashboard': renderDashboard(); break;
+                case 'contacts': renderContacts(); break;
+                case 'pipeline': renderPipeline(); break;
+                case 'detail': renderDetail(); break;
+            }
+        }
+
+        function renderDashboard() {
+            const contacts = DB.get('contacts');
+            const deals = DB.get('deals');
+            const wonDeals = deals.filter(d => d.stage === 'ganho').length;
+            const openDeals = deals.filter(d => !['ganho', 'perdido'].includes(d.stage)).length;
+            const convRate = deals.length ? ((wonDeals / deals.length) * 100).toFixed(1) : 0;
+
+            $('#dashboard-content').innerHTML = `
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-value">${contacts.length}</span>
+                        <span class="kpi-label">Total de Contatos</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-value">${openDeals}</span>
+                        <span class="kpi-label">Negociações Abertas</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-value">${convRate}%</span>
+                        <span class="kpi-label">Taxa de Conversão</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-value">${wonDeals}</span>
+                        <span class="kpi-label">Negociações Ganhas</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: var(--space-6);">Contatos Recentes</h3>
+                    <div class="table-container">
+                        <table class="meridian-table">
+                            <thead>
+                                <tr><th>Nome</th><th>Empresa</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                ${contacts.slice(-5).reverse().map(c => `
+                                    <tr>
+                                        <td style="font-weight: 600;">${c.name}</td>
+                                        <td>${c.company}</td>
+                                        <td><span class="badge badge-${c.status === 'cliente' ? 'won' : (c.status === 'lead' ? 'hot' : 'lost')}">${c.status}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderContacts() {
+            const contacts = DB.get('contacts');
+            const searchVal = $('#contact-search')?.value || '';
+
+            $('#contacts-content').innerHTML = `
+                <div class="toolbar">
+                    <div class="search-box">
+                        <input type="text" id="contact-search" placeholder="Buscar nome ou email..." value="${searchVal}">
+                        <select id="contact-filter">
+                            <option value="all">Todos</option>
+                            <option value="lead">Lead</option>
+                            <option value="cliente">Cliente</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
+                    ${createBtn('Novo Contato', 'btn-primary', () => showContactModal(), 'ph-plus').outerHTML}
+                </div>
+                <div class="table-container">
+                    <table class="meridian-table">
+                        <thead>
+                            <tr><th>Nome</th><th>Email</th><th>Empresa</th><th>Status</th><th>Ações</th></tr>
+                        </thead>
+                        <tbody>
+                            ${contacts
+                                .filter(c => (c.name.toLowerCase().includes(searchVal.toLowerCase()) || c.email.toLowerCase().includes(searchVal.toLowerCase())))
+                                .map(c => `
+                                <tr>
+                                    <td style="font-weight: 600;"><a href="#" onclick="viewContact('${c.id}'); return false;" style="color: inherit; text-decoration: none;">${c.name}</a></td>
+                                    <td>${c.email}</td>
+                                    <td>${c.company}</td>
+                                    <td><span class="badge badge-${c.status === 'cliente' ? 'won' : (c.status === 'lead' ? 'hot' : 'lost')}">${c.status}</span></td>
+                                    <td>
+                                        <button class="btn btn-ghost" style="padding: 0 8px; height: 24px; font-size: 10px;" onclick="showContactModal('${c.id}')">Editar</button>
+                                        <button class="btn btn-ghost" style="padding: 0 8px; height: 24px; font-size: 10px; color: var(--color-accent);" onclick="deleteContact('${c.id}')">Excluir</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            $('#contact-search').addEventListener('input', renderContacts);
+            $('#contact-filter').addEventListener('change', renderContacts);
+        }
+
+        function renderPipeline() {
+            const stages = {
+                'prospeccao': 'Prospecção',
+                'qualificacao': 'Qualificação',
+                'proposta': 'Proposta',
+                'negociacao': 'Negociação',
+                'ganho': 'Ganho',
+                'perdido': 'Perdido'
+            };
+            const deals = DB.get('deals');
+            const contacts = DB.get('contacts');
+
+            let boardHtml = '<div class="kanban-board">';
+
+            for (const [id, name] of Object.entries(stages)) {
+                const stageDeals = deals.filter(d => d.stage === id);
+                const totalValue = stageDeals.reduce((sum, d) => sum + Number(d.value), 0);
+
+                boardHtml += `
+                    <div class="kanban-column" ondragover="allowDrop(event)" ondrop="drop(event, '${id}')">
+                        <div class="column-header">
+                            <span>${name} <span class="column-count">${stageDeals.length}</span></span>
+                            <span class="column-value">R$ ${totalValue.toLocaleString()}</span>
+                        </div>
+                        <div class="kanban-cards">
+                            ${stageDeals.map(d => {
+                                const contact = contacts.find(c => c.id === d.contactId);
+                                return `
+                                    <div class="deal-card" draggable="true" ondragstart="drag(event, '${d.id}')">
+                                        <h4>${d.title}</h4>
+                                        <div class="deal-info">
+                                            <span>${contact?.name || 'S/ Contato'}</span>
+                                            <span class="deal-value">R$ ${Number(d.value).toLocaleString()}</span>
+                                        </div>
+                                        <div style="margin-top: var(--space-3); display: flex; gap: var(--space-2);">
+                                            <button class="btn btn-ghost" style="padding: 0 4px; height: 20px; font-size: 9px;" onclick="editDeal('${d.id}')">Editar</button>
+                                            <button class="btn btn-ghost" style="padding: 0 4px; height: 20px; font-size: 9px; color: var(--color-accent);" onclick="deleteDeal('${d.id}')">Excluir</button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            boardHtml += '</div>';
+
+            $('#pipeline-content').innerHTML = `
+                <div class="toolbar">
+                    <h2 style="font-family: 'Playfair Display', serif; font-size: var(--text-xl);">Pipeline</h2>
+                    ${createBtn('Nova Negociação', 'btn-primary', () => showDealModal(), 'ph-plus').outerHTML}
+                </div>
+                ${boardHtml}
+            `;
+        }
+
+        function renderDetail() {
+            const contact = DB.get('contacts').find(c => c.id === state.currentContactId);
+            if (!contact) return navigateTo('contacts');
+
+            const deals = DB.get('deals').filter(d => d.contactId === contact.id);
+            const activities = DB.get('activities').filter(a => a.contactId === contact.id).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            $('#detail-content').innerHTML = `
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <h2>${contact.name}</h2>
+                            <p style="color: var(--color-ink-muted); font-size: var(--text-sm);">${contact.company}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+                            <div class="detail-field">
+                                <label>Email</label>
+                                <span>${contact.email}</span>
+                            </div>
+                            <div class="detail-field">
+                                <label>Telefone</label>
+                                <span>${contact.phone}</span>
+                            </div>
+                            <div class="detail-field">
+                                <label>Status</label>
+                                <span class="badge badge-${contact.status === 'cliente' ? 'won' : (contact.status === 'lead' ? 'hot' : 'lost')}">${contact.status}</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: var(--space-8); display: flex; gap: var(--space-4);">
+                            ${createBtn('Editar', 'btn-secondary', () => showContactModal(contact.id)).outerHTML}
+                            ${createBtn('Excluir', 'btn-ghost', () => deleteContact(contact.id)).outerHTML}
+                        </div>
+                    </div>
+                    <div class="detail-main" style="display: flex; flex-direction: column; gap: var(--space-8);">
+                        <div class="detail-card">
+                            <div class="toolbar">
+                                <h3 style="font-family: 'Playfair Display', serif;">Negociações</h3>
+                                ${createBtn('Nova Deal', 'btn-primary', () => showDealModal(contact.id), 'ph-plus').outerHTML}
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                                ${deals.map(d => `
+                                    <div class="deal-card" style="cursor: default;">
+                                        <h4>${d.title}</h4>
+                                        <div class="deal-info">
+                                            <span class="badge badge-pending">${d.stage}</span>
+                                            <span class="deal-value">R$ ${Number(d.value).toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                `).join('') || '<p style="color: var(--color-ink-muted)">Nenhuma negociação.</p>'}
+                            </div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="toolbar">
+                                <h3 style="font-family: 'Playfair Display', serif;">Histórico de Atividades</h3>
+                                ${createBtn('Registrar Atividade', 'btn-primary', () => showActivityModal(contact.id), 'ph-pencil').outerHTML}
+                            </div>
+                            <div class="activity-list">
+                                ${activities.map(a => `
+                                    <div class="activity-item">
+                                        <div class="activity-meta">
+                                            <span class="activity-type">${a.type}</span>
+                                            <span class="cell-id">${new Date(a.createdAt).toLocaleString()}</span>
+                                        </div>
+                                        <div class="activity-desc" style="font-size: var(--text-sm);">${a.description}</div>
+                                    </div>
+                                `).join('') || '<p style="color: var(--color-ink-muted)">Nenhuma atividade registrada.</p>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- MODALS SYSTEM ---
+        function showModal(title, content) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.style.display = 'flex';
+            overlay.innerHTML = `
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3>${title}</h3>
+                        <button class="btn btn-ghost" style="font-size: 18px; padding: 0;" onclick="this.closest('.modal-overlay').remove()">✕</button>
+                    </div>
+                    ${content}
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            overlay.onclick = (e) => {
+                if (e.target === overlay) overlay.remove();
+            };
+        }
+
+        function showContactModal(id = null) {
+            const contact = id ? DB.get('contacts').find(c => c.id === id) : { name: '', email: '', phone: '', company: '', status: 'lead' };
+
+            const content = `
+                <form id="contact-form" onsubmit="saveContact(event)">
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" name="name" value="${contact.name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value="${contact.email}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="text" name="phone" value="${contact.phone}">
+                    </div>
+                    <div class="form-group">
+                        <label>Empresa</label>
+                        <input type="text" name="company" value="${contact.company}">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="lead" ${contact.status === 'lead' ? 'selected' : ''}>Lead</option>
+                            <option value="cliente" ${contact.status === 'cliente' ? 'selected' : ''}>Cliente</option>
+                            <option value="inativo" ${contact.status === 'inativo' ? 'selected' : ''}>Inativo</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="id" value="${id || ''}">
+                    <div style="display: flex; justify-content: flex-end; gap: var(--space-4); margin-top: var(--space-6);">
+                        <button type="button" class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            `;
+            showModal(id ? 'Editar Contato' : 'Novo Contato', content);
+        }
+
+        function showDealModal(contactId = null) {
+            const contacts = DB.get('contacts');
+
+            const content = `
+                <form id="deal-form" onsubmit="saveDeal(event)">
+                    <div class="form-group">
+                        <label>Título da Negociação</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contato</label>
+                        <select name="contactId" required>
+                            ${contacts.map(c => `<option value="${c.id}" ${c.id === contactId ? 'selected' : ''}>${c.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Etapa</label>
+                        <select name="stage">
+                            <option value="prospeccao">Prospecção</option>
+                            <option value="qualificacao">Qualificação</option>
+                            <option value="proposta">Proposta</option>
+                            <option value="negociacao">Negociação</option>
+                            <option value="ganho">Ganho</option>
+                            <option value="perdido">Perdido</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" name="value" required>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; gap: var(--space-4); margin-top: var(--space-6);">
+                        <button type="button" class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            `;
+            showModal('Negociação', content);
+        }
+
+        function showActivityModal(contactId) {
+            const content = `
+                <form id="activity-form" onsubmit="saveActivity(event)">
+                    <input type="hidden" name="contactId" value="${contactId}">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select name="type">
+                            <option value="ligacao">Ligação</option>
+                            <option value="email">Email</option>
+                            <option value="reuniao">Reunião</option>
+                            <option value="nota">Nota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <textarea name="description" rows="4" required style="height: auto;"></textarea>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; gap: var(--space-4); margin-top: var(--space-6);">
+                        <button type="button" class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            `;
+            showModal('Registrar Atividade', content);
+        }
+
+        // --- ACTIONS ---
+        window.viewContact = (id) => {
+            state.currentContactId = id;
+            navigateTo('detail');
+        };
+
+        window.saveContact = (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const contact = Object.fromEntries(formData.entries());
+            contact.id = contact.id || crypto.randomUUID();
+            contact.updatedAt = new Date().toISOString();
+            if (!contact.createdAt) contact.createdAt = new Date().toISOString();
+
+            DB.saveContact(contact);
+            e.target.closest('.modal-overlay').remove();
+            renderCurrentPage();
+        };
+
+        window.deleteContact = (id) => {
+            if (confirm('Tem certeza que deseja excluir este contato e todas as suas atividades/negociações?')) {
+                DB.deleteContact(id);
+                renderCurrentPage();
+            }
+        };
+
+        window.saveDeal = (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const deal = Object.fromEntries(formData.entries());
+            deal.id = crypto.randomUUID();
+            deal.value = Number(deal.value);
+            deal.createdAt = new Date().toISOString();
+            deal.updatedAt = new Date().toISOString();
+
+            DB.saveDeal(deal);
+            e.target.closest('.modal-overlay').remove();
+            renderCurrentPage();
+        };
+
+        window.deleteDeal = (id) => {
+            if (confirm('Excluir negociação?')) {
+                DB.deleteDeal(id);
+                renderCurrentPage();
+            }
+        };
+
+        window.saveActivity = (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const activity = Object.fromEntries(formData.entries());
+            activity.id = crypto.randomUUID();
+            activity.createdAt = new Date().toISOString();
+
+            DB.saveActivity(activity);
+            e.target.closest('.modal-overlay').remove();
+            renderCurrentPage();
+        };
+
+        // --- KANBAN DRAG & DROP ---
+        window.allowDrop = (e) => e.preventDefault();
+
+        window.drag = (e, id) => {
+            e.dataTransfer.setData('dealId', id);
+        };
+
+        window.drop = (e, stage) => {
+            e.preventDefault();
+            const dealId = e.dataTransfer.getData('dealId');
+            const deals = DB.get('deals');
+            const deal = deals.find(d => d.id === dealId);
+            if (deal) {
+                deal.stage = stage;
+                deal.updatedAt = new Date().toISOString();
+                DB.saveDeal(deal);
+                renderCurrentPage();
+            }
+        };
+
+        // --- INIT ---
+        window.addEventListener('DOMContentLoaded', () => {
+            DB.seed();
+            renderCurrentPage();
+        });
+    </script>
+</body>
+</html>

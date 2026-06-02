@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+# Except this file
+!.gitignore
+!README.md
+
+# Except the main entry point
+!index.html
